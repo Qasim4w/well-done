@@ -1,65 +1,139 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:provider/provider.dart';
+import 'package:well_done/Foes/Add_Foe.dart';
 import 'package:well_done/Friends/Add_Friends.dart';
+import 'package:well_done/Provider/targetScreenProvider.dart';
+import 'package:well_done/boxes/boxes.dart';
+import 'package:well_done/models/foe_model.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:well_done/models/friends_model.dart';
+import 'package:well_done/utils/AppColor.dart';
+import 'package:well_done/utils/AppImages.dart';
 
-class Friends_list_view extends StatefulWidget {
-  const Friends_list_view({Key? key}) : super(key: key);
+import '../Provider/foeProvider.dart';
+import '../Targets/Add_target.dart';
 
-  @override
-  State<Friends_list_view> createState() => _Friends_list_viewState();
-}
+class FriendsListScreen extends StatelessWidget {
+  final String targetName;
 
-class _Friends_list_viewState extends State<Friends_list_view> {
+  FriendsListScreen({super.key, required this.targetName});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.grey,
-        title: Padding(
-          padding:  EdgeInsets.only(left: 75.w,),
-          child: Text('Friends List'),
+    var provider = Provider.of<FoeProvider>(context);
+    print(targetName);
+    return SafeArea(
+
+      child: Scaffold(backgroundColor: AppColor.green.withOpacity(.5),
+        appBar: AppBar(backgroundColor:Colors.transparent,elevation: 0,
+          title: Text('Friends'),centerTitle: true,
+          leading: IconButton(icon: Icon(Icons.arrow_back,color: AppColor.white,size: 40,),onPressed: (){Get.back();}),),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: AppColor.greenlight.withOpacity(.7),
+          onPressed: () {
+            Get.to(Add_Friends(Targetname: targetName));
+          },
+          child: Icon(Icons.add),
         ),
-      ),
-      body: Padding(
-        padding:  EdgeInsets.symmetric(horizontal: 20.w),
-        child: Column(
-          children: [
-            SizedBox(height: 50.h),
-            Expanded(
+        body:ValueListenableBuilder<Box<FriendsModel>>(
+          valueListenable:Boxes.getFriends().listenable(),
+          builder: (context,box,_){
+            var data = box.values.toList().cast<FriendsModel>();
+            return  Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
               child: ListView.builder(
-                itemCount: 5,
-                itemBuilder: (BuildContext context, int index) {
-                  return  Column(
-                    children: [
-                      Card(
-                        borderOnForeground: false,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children:   [
-                            Center(child: Text('Friend 1',style: TextStyle(color: Colors.black,),)),
-                            SizedBox(height: 20.h,),
+                physics: BouncingScrollPhysics(),
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  if (data[index].targetname== targetName) {
+                    print(data[index].targetname+"Qasim");
+                    print(targetName+"hello");
+                    return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Stack(alignment: Alignment.topRight,
+                        children: [
+                          Container(
+                            width: 364,
 
-                          ],
-                        ),
-                      ),
-                  Divider(thickness: 2,color: Colors.black,height: 45)
-                    ],
-                  );
+                            padding: EdgeInsets.symmetric(horizontal: 20.w,vertical: 30.h),
 
+                            decoration: ShapeDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment(0.00, -1.00),
+                                end: Alignment(0, 1),
+                                colors: [Color(0xFF11998E).withOpacity(.5), Color(0xFF38EF7D).withOpacity(.5)],
+                              ),
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(width: 1, color: Color(0xFF11998E)),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                  data[index].friendsname,
+                  style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 25,
+                  fontFamily: 'Futura Md BT',
+                  fontWeight: FontWeight.w500,
+                  ),
+                          ),
+                            ),
+                    ),
+                          Padding(
+                            padding:  EdgeInsets.only(right: 15.w,top: 10.h),
+                            child: InkWell(onTap: (){
+                              _showDialog(context, data[index]);
+                            },
+                                child: Image.asset(AppImages.cross,height: 15.h,width: 15.w)),
+                          ),
+                        ],
+
+                      ));
+                  } else {
+                    return SizedBox.shrink(); // Return an empty widget if target names don't match
+                  }
                 },
               ),
-            )
-          ],
+            );
+          },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.black,
-        onPressed: (){Get.to(Add_Friends_view());},
-        child: Icon(Icons.add,),
-      ),
+    );
+  }
+  void delete(FriendsModel friendsmodel) async {
+    await friendsmodel.delete();
+  }
+  void _showDialog(BuildContext context,FriendsModel friendsModel) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return
+          AlertDialog(
+            title: Text('Delete !',style: TextStyle(color: AppColor.purple),),
+            content: Text('Are you Sure to Delete Your Friends',style: TextStyle(color: AppColor.purple),),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Cancel',style: TextStyle(color: AppColor.orange),),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text('OK',style: TextStyle(color: AppColor.green),),
+                onPressed: () {
+                  delete(friendsModel);
+                  // Perform some action
+
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+      },
+
     );
   }
 }

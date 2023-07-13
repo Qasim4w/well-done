@@ -20,7 +20,7 @@ class _Date_TimeState extends State<Date_Time> {
       dateMask: 'd MMM, yyyy',
       initialValue: DateTime.now().toString(),
       firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
+      lastDate: DateTime(2050),
       // icon: Icon(Icons.event),
       dateLabelText: 'Date',
       timeLabelText: "Time",
