@@ -67,6 +67,7 @@ class _Add_FriendsState extends State<Add_Friends> {
                     height: 5,
                   ),
                   App_TextField(
+                    focusColor: AppColor.green,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Please enter a Friend name';

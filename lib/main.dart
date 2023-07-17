@@ -9,6 +9,7 @@ import 'package:well_done/7Counter/7Counter.dart';
 import 'package:well_done/Home_Screen/ProjectScreen.dart';
 import 'package:get/get.dart';
 import 'package:well_done/Provider/project_screen.dart';
+import 'package:well_done/Provider/sunMoonScreenProvider.dart';
 import 'package:well_done/Provider/targetScreenProvider.dart';
 import 'package:well_done/models/foe_model.dart';
 import 'package:well_done/models/friends_model.dart';
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
             ChangeNotifierProvider(create: (_)=>FoeProvider()),
             ChangeNotifierProvider(create: (_)=>FriendsProvider()),
             ChangeNotifierProvider(create: (_)=>ProjectScreenProvider()),
+            ChangeNotifierProvider(create: (_)=>SunMoonProvider()),
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,

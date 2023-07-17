@@ -24,6 +24,7 @@ class dropDown<T> extends StatelessWidget {
         decoration: InputDecoration(contentPadding: EdgeInsets.all(10),
             border: InputBorder.none,
 
+
             prefixIcon: prefixIcon,hintText: hintText),
         items: items.map((T item) {
           return DropdownMenuItem<T>(

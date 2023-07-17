@@ -71,15 +71,42 @@ class FriendsListScreen extends StatelessWidget {
                               ),
                             ),
                             child: Center(
-                              child: Text(
-                  data[index].friendsname,
-                  style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 25,
-                  fontFamily: 'Futura Md BT',
-                  fontWeight: FontWeight.w500,
-                  ),
-                          ),
+                              child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    data[index].friendsname,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 25,
+                                      fontFamily: 'Futura Md BT',
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(height: 15.h),
+                                  Row(crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Target Name :',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontFamily: 'Futura Md BT',
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),SizedBox(width: 10,), Expanded(
+                                        child: Text(
+                                          data[index].targetname,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 15,
+                                            fontFamily: 'Futura Md BT',
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ),
+                                    ],)
+                                ],
+                              ),
                             ),
                     ),
                           Padding(

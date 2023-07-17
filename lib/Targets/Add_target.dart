@@ -81,7 +81,7 @@ class _Add_targetState extends State<Add_target> {
                     'Add Description',
                     style: TextStyle(color: Colors.black),
                   ),
-                  SizedBox(
+                    SizedBox(
                     height: 5,
                   ),
                   App_TextField(
@@ -117,6 +117,9 @@ class _Add_targetState extends State<Add_target> {
                           return null;
                         },
                         decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: AppColor.purple),
+                              borderRadius: BorderRadius.circular(10)),
                           suffixIcon: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: dropDown(
@@ -127,6 +130,7 @@ class _Add_targetState extends State<Add_target> {
                                 }),
                           ),
                           border: OutlineInputBorder(
+                            borderSide: BorderSide(color: AppColor.purple),
                               borderRadius: BorderRadius.circular(10)),
                         ),
                       );
@@ -161,7 +165,7 @@ class _Add_targetState extends State<Add_target> {
                             padding: EdgeInsets.all(10),
                             height: 50,
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
+                              border: Border.all(color: AppColor.purple),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Center(
@@ -180,8 +184,9 @@ class _Add_targetState extends State<Add_target> {
                       GestureDetector(
                         onTap: () async {
                           pickedSchedule = await pickSchedule(context);
-                          provider = Provider.of<TargetProvider>(context);
-                          provider.updateTime();
+                          print("88888888888888888,,,,,,,,,,,,,8888888888888888888888888888888888    ${pickedSchedule?.time}     ");
+                          // provider = Provider.of<TargetProvider>(context);
+                          // provider.updateTime();
                           /*var selectedTime = await showTimePicker(
                   context: context,
                   initialTime: TimeOfDay.now(),
@@ -196,7 +201,7 @@ class _Add_targetState extends State<Add_target> {
                             padding: EdgeInsets.all(10),
                             height: 50,
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
+                              border: Border.all(color: AppColor.purple),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Center(
@@ -223,14 +228,23 @@ class _Add_targetState extends State<Add_target> {
                         text: 'save',
                         onPressed: () async {
                           if (_key.currentState!.validate()) {
+                            //NotificationService.cancelScheduledNotifications();
                             print(
                                 "----------------------${pickedSchedule?.timeOfDay}-------------------------------------");
+                            print(
+                                "----------------------${pickedSchedule?.timeOfDay.month}------------------${pickedSchedule?.timeOfDay.day}---------------------"); print(
+                                "----------------------${pickedSchedule?.timeOfDay.year}-------------------------------------");
+
                             await NotificationService.showNotification(
                               title:
                                   "${Emojis.person_role_health_worker} Please Set Target",
                               body: "Set your Target ِ",
-                              scheduled: true,
-                              interval: 5,
+                              scheduled: false,
+                              interval: 0,
+                              payload: {"navigate":"true"},
+                              actionButtons: [
+                                NotificationActionButton(key: 'check', label: 'check it out',actionType: ActionType.SilentAction,color: Colors.orange)
+                              ],
                               notificationSchedule: pickedSchedule,
                             );
 
@@ -259,7 +273,7 @@ class _Add_targetState extends State<Add_target> {
                               // Handle the case when the entry already exists
                               print(
                                   '**********************************Entry already exists in the box.**********************************');
-
+                              Get.snackbar('', 'Data Already Exits');
                             }
                             Get.back();
 

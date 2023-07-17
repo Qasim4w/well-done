@@ -27,7 +27,7 @@ class NotificationService {
           // criticalAlerts: true,
         )
       ],
-       channelGroups: [
+      channelGroups: [
         NotificationChannelGroup(
           channelGroupKey: 'high_importance_channel_group',
           channelGroupName: 'Group 1',
@@ -44,7 +44,7 @@ class NotificationService {
       },
     );
 
-     await AwesomeNotifications().setListeners(
+    await AwesomeNotifications().setListeners(
       onActionReceivedMethod: onActionReceivedMethod,
       onNotificationCreatedMethod: onNotificationCreatedMethod,
       onNotificationDisplayedMethod: onNotificationDisplayedMethod,
@@ -107,16 +107,16 @@ class NotificationService {
         channelKey: 'high_importance_channel',
         title: title,
         body: body,
-         actionType: actionType,
+        actionType: actionType,
         notificationLayout: notificationLayout,
         summary: summary,
-         category: category,
+        category: category,
         payload: payload,
         bigPicture: bigPicture,
       ),
       actionButtons: actionButtons,
 
-      schedule: NotificationCalendar(
+      schedule:scheduled? NotificationCalendar(day:notificationSchedule?.timeOfDay.day ,month: notificationSchedule?.timeOfDay.month,
         // weekday: notificationSchedule.dayOfTheWeek,
         hour: notificationSchedule?.timeOfDay.hour,
         minute: notificationSchedule?.timeOfDay.minute,
@@ -124,7 +124,7 @@ class NotificationService {
         millisecond: 0,
         repeats: true,
 
-      ),
+      ):null,
     );
   }
 

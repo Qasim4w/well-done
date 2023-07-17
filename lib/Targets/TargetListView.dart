@@ -150,6 +150,7 @@ class TargetListScreen extends StatelessWidget {
 
   void delete(TargetModel targetModel) async {
     await targetModel.delete();
+
   }
   void _showDialog(BuildContext context,TargetModel targetModel) {
     showDialog(

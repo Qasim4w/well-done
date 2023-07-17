@@ -14,6 +14,12 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "animation_list",
+      "rootUri": "file:///C:/Users/qasim/AppData/Local/Pub/Cache/hosted/pub.dev/animation_list-2.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "animations",
       "rootUri": "file:///C:/Users/qasim/AppData/Local/Pub/Cache/hosted/pub.dev/animations-2.0.7",
       "packageUri": "lib/",
@@ -560,6 +566,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "tdk_bouncingwidget",
+      "rootUri": "file:///C:/Users/qasim/AppData/Local/Pub/Cache/hosted/pub.dev/tdk_bouncingwidget-1.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
       "name": "term_glyph",
       "rootUri": "file:///C:/Users/qasim/AppData/Local/Pub/Cache/hosted/pub.dev/term_glyph-1.2.1",
       "packageUri": "lib/",
@@ -638,7 +650,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-07-12T05:50:50.254081Z",
+  "generated": "2023-07-15T05:14:19.679649Z",
   "generator": "pub",
   "generatorVersion": "3.0.5"
 }

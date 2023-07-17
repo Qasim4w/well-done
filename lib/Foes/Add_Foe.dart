@@ -68,7 +68,7 @@ class _Add_FoeState extends State<Add_Foe> {
                   SizedBox(
                     height: 5,
                   ),
-                  App_TextField(
+                  App_TextField(focusColor: AppColor.orange,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Please enter a Foe name';

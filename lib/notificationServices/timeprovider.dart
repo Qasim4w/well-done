@@ -9,23 +9,22 @@ int createUniqueId() {
 
 class NotificationWeekAndTime {
 
-  final TimeOfDay timeOfDay;
- String time=DateTime.now().toString();
+  final DateTime timeOfDay;
+  String time=DateTime.now().toString();
 
   NotificationWeekAndTime({
     required this.timeOfDay,
   });
 }
-
+DateTime? selectedDateTime;
 Future<NotificationWeekAndTime?> pickSchedule(
     BuildContext context,
     ) async {
-
-  TimeOfDay? timeOfDay;
-  DateTime now = DateTime.now();
-  timeOfDay    = await showTimePicker(
+  final DateTime? picked = await showDatePicker(
     context: context,
-    initialTime: TimeOfDay.now(),
+    initialDate: DateTime.now(),
+    firstDate: DateTime(2021),
+    lastDate: DateTime(2025),
     builder: (BuildContext context, Widget? child) {
       return MediaQuery(
         data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
@@ -34,18 +33,23 @@ Future<NotificationWeekAndTime?> pickSchedule(
     },
   );
 
-  if (timeOfDay != null) {
-    DateTime now = DateTime.now();
-    DateTime selectedDateTime = DateTime(now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
-    String formattedTime = DateFormat('hh:mm a').format(selectedDateTime);
-    GlobalVariable.time=formattedTime;
-    //  await prefs.remove('time');
+  if (picked != null) {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
 
+    if (pickedTime != null) {
 
-
-    return NotificationWeekAndTime(
-        timeOfDay: timeOfDay);
-    print(formattedTime); // Display the selected time in "hh:mm a" format (e.g., "11:20 PM")
+      selectedDateTime = DateTime(
+        picked.year,
+        picked.month,
+        picked.day,
+        pickedTime.hour,
+        pickedTime.minute,
+      );
+    }
+    return NotificationWeekAndTime(timeOfDay: selectedDateTime!);
   }
 
 
@@ -55,32 +59,15 @@ Future<NotificationWeekAndTime?> pickSchedule(
 
 
 
-  /* await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.fromDateTime(
-          now.add(
-            Duration(minutes: 1),
-          ),
-        ),
-        builder: (BuildContext context, Widget? child) {
-          return Theme(
-            data: ThemeData(
-              colorScheme: ColorScheme.light(
-                primary: Colors.teal,
-              ),
-            ),
-            child: child!,
-          );
-        });*/
-
-  if (timeOfDay != null) {
-
-    //  await prefs.remove('time');
 
 
-    return NotificationWeekAndTime(
-        timeOfDay: timeOfDay);
-  }
+
+
+
+
+
+
+
 
   return null;
 }
