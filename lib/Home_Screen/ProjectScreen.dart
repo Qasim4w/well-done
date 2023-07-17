@@ -134,11 +134,12 @@ class _ProjectScreenState extends State<ProjectScreen> with TickerProviderStateM
                         return SizedBox(height: 300.h,width: 200.w,
                           child: ListView.builder(
                             itemCount:data.length,
+                            physics: BouncingScrollPhysics(),
                             itemBuilder: (context, index) {
                               return data[index].targetname==targetname? Column(crossAxisAlignment: CrossAxisAlignment.start
                                 ,
                                 children: [
-                                  InkWell(onTap: (){
+                                  GestureDetector(onHorizontalDragStart: (value){
                                     // leftFoe=false;
                                     provider.changeLeftFoe(false);
                                     // rightFriends=false;
@@ -325,6 +326,7 @@ class _ProjectScreenState extends State<ProjectScreen> with TickerProviderStateM
                     return SizedBox(height: 300.h,width: 200.w,
                       child: ListView.builder(
                         itemCount:data.length,
+                        physics: BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
                           // final helper = box.getAt(index) as FriendsModel;
                           print('**********************$targetname****************************');
@@ -332,7 +334,7 @@ class _ProjectScreenState extends State<ProjectScreen> with TickerProviderStateM
                          return data[index].targetname==targetname? Column(crossAxisAlignment: CrossAxisAlignment.end
                            ,
                            children: [
-                             InkWell(onTap: (){
+                             GestureDetector(onHorizontalDragStart: (value){
 
                                // leftFoe=false;
                                provider.changeRightFoe(false);
