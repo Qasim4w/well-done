@@ -22,7 +22,7 @@ class ProjectScreenProvider with ChangeNotifier{
     notifyListeners();
   }
   bool _centreTitleBox = false;
-  bool   get centreTitleBox => _centreTitleBox;
+  bool   get centreBoxVisibility => _centreTitleBox;
 
   void changeCentreTitleBox(bool value){
     _centreTitleBox = value;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
@@ -33,8 +34,12 @@ void main() async{
   await Hive.openBox<TargetModel>('target');
   await Hive.openBox<FriendsModel>('friends');
   await Hive.openBox<FoeModel>('foe');
-
-  runApp(MyApp());
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(MyApp());
+  });
+  //
+  // runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

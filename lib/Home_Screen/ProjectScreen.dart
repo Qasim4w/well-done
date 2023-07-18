@@ -50,8 +50,9 @@ class _ProjectScreenState extends State<ProjectScreen> with TickerProviderStateM
   }
   void startTimer() {
     // Schedule the function to run every 5 minutes (300 seconds)
-    timer = Timer.periodic(Duration(days: 1), (_) {
+    timer = Timer.periodic(Duration(minutes: 10), (_) {
       updateOpacityForAll();
+      print("Timeer call");
     });
   }
 
@@ -93,7 +94,7 @@ class _ProjectScreenState extends State<ProjectScreen> with TickerProviderStateM
 
       // Update the opacity
       friend.Friendsopacity = 0.5;
-      print('********************************${friend.Friendsopacity}************************');
+      print('********************************${friend.Friendsopacity}Change from .9 ************************');
 
       // Save the updated target model to the box
       box.put(i, friend);
@@ -399,7 +400,7 @@ class _ProjectScreenState extends State<ProjectScreen> with TickerProviderStateM
                 ),
               ),
               Visibility(
-                visible: provider.centreTitleBox,
+                visible: provider.centreBoxVisibility,
 
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 175.h, horizontal: 120.w),
@@ -478,15 +479,15 @@ class _ProjectScreenState extends State<ProjectScreen> with TickerProviderStateM
                         gradient: LinearGradient(
                           begin: Alignment(0.00, -1.00),
                           end: Alignment(0, 1),
-                          colors: [AppColor.purple.withOpacity(.5), AppColor.lightpurple.withOpacity(.4)],
+                          colors: [AppColor.purple.withOpacity(.7), AppColor.lightpurple.withOpacity(.4)],
                         ),
                         shape: RoundedRectangleBorder(
                           side: BorderSide(
-                              width: 1.w, color: c11),
+                              width: 1.5.w, color: AppColor.purple),
                           borderRadius: BorderRadius.circular(20.r),
                         ),
                       ),
-                      child: Center(child: Text(targetname.toString(),style: TextStyle(fontSize: 20.sp),)),
+                      child: Center(child: Text(targetname.toString(),style: TextStyle(fontSize: 25.sp,fontWeight: FontWeight.w800),)),
                     )
 
                 ),
@@ -498,7 +499,7 @@ class _ProjectScreenState extends State<ProjectScreen> with TickerProviderStateM
                   visible: provider.titleContainer?false:true,
                   child: Padding(
                     padding:  EdgeInsets.symmetric(horizontal: 70.w,vertical: 90.h),
-                    child:!provider.centreTitleBox ? Text(
+                    child:!provider.centreBoxVisibility ? Text(
                       'Click the button below to Continue',
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -537,7 +538,7 @@ class _ProjectScreenState extends State<ProjectScreen> with TickerProviderStateM
                       // detailBoxVisibility=false;
                       provider.changedetailBoxCentre(false);
                       // print(provider.leftFoe);
-                      if(provider.centreTitleBox==true){
+                      if(provider.centreBoxVisibility==true){
                         // centreTarget=false;
                         provider.changeCentreTitleBox(false);
 
@@ -557,7 +558,7 @@ class _ProjectScreenState extends State<ProjectScreen> with TickerProviderStateM
                       provider.changedetailBoxCentre(false);
                       // print("******************************Hello   ******************************************");
 
-                      if(provider.centreTitleBox==true){
+                      if(provider.centreBoxVisibility==true){
                         // centreTarget=false;
                         provider.changeCentreTitleBox(false);
                         // detailBoxVisibility=false;
@@ -576,7 +577,7 @@ class _ProjectScreenState extends State<ProjectScreen> with TickerProviderStateM
               Positioned(bottom: 30,left: 155,
                 child: ButtonContainer(onTap: (){
                   // centreTarget=!centreTarget;
-                  provider.changeCentreTitleBox(!provider.centreTitleBox);
+                  provider.changeCentreTitleBox(!provider.centreBoxVisibility);
                   // detailBoxVisibility=false;
                   provider.changedetailBoxCentre(false);
 
@@ -589,7 +590,7 @@ class _ProjectScreenState extends State<ProjectScreen> with TickerProviderStateM
                     provider.changedetailBoxCentre(false);
                   }
 
-                },border: AppColor.purple,image: AppImages.centreButtonIcon,c1: AppColor.purple.withOpacity(.5),c2: AppColor.lightpurple.withOpacity(.5),isOpened: provider.centreTitleBox,),
+                },border: AppColor.purple,image: AppImages.centreButtonIcon,c1: AppColor.purple.withOpacity(.5),c2: AppColor.lightpurple.withOpacity(.5),isOpened: provider.centreBoxVisibility,),
               ),
 
             ],
