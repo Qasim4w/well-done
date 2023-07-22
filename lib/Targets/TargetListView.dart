@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:well_done/Foes/Add_Foe.dart';
 import 'package:well_done/Foes/Foes_List.dart';
 import 'package:well_done/Home_Screen/ProjectScreen.dart';
+import 'package:well_done/Provider/UploadData%20to%20hive/uploadTargetData.dart';
 import 'package:well_done/Provider/targetScreenProvider.dart';
 import 'package:well_done/Widgets/Button.dart';
 import 'package:well_done/boxes/boxes.dart';
@@ -22,6 +23,7 @@ class TargetListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<TargetProvider>(context);
+    var uploaddata =Provider.of<UploadTarget>(context);
     return SafeArea(
       child: Scaffold(backgroundColor: AppColor.lightpurple.withOpacity(.7),
         appBar: AppBar(backgroundColor:Colors.transparent,elevation: 0,
@@ -42,6 +44,8 @@ class TargetListScreen extends StatelessWidget {
                 itemCount: box.length,
                 physics: BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
+                  print("[[[[[[[[[[[[[[[[[[[[[[[[[[[[${index}]]]]]]]]]]]]]]]]]]]]]]]]]]]]");
+                  uploaddata.registerAPI(targetName: data[index].TargetName, Targetdescription: data[index].Description, frequency: data[index].Description);
                   return Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
@@ -90,6 +94,11 @@ class TargetListScreen extends StatelessWidget {
 
                                 ),
                               ),
+                              Text(data[index].Time,style: TextStyle(
+                                color: Colors.white.withOpacity(0.8999999761581421),
+                                fontSize: 16,
+                                fontFamily: 'Futura Bk BT',
+                                fontWeight: FontWeight.w400,),),
                               SizedBox(
                                 height: 20,
                               ),

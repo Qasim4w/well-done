@@ -1,8 +1,10 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:well_done/DataLink/Streaming/Universal.dart';
 import 'package:well_done/Provider/friendsprovider.dart';
 import 'package:well_done/Provider/targetScreenProvider.dart';
 import 'package:well_done/Widgets/Button.dart';
@@ -11,6 +13,8 @@ import 'package:well_done/Widgets/Project_TextField.dart';
 import 'package:well_done/Widgets/dropDown_Field.dart';
 import 'package:well_done/boxes/boxes.dart';
 import 'package:well_done/models/friends_model.dart';
+import 'package:well_done/notificationServices/notification_provider.dart';
+import 'package:well_done/notificationServices/timeprovider.dart';
 import 'package:well_done/utils/AppColor.dart';
 
 import '../Targets/TargetListView.dart';
@@ -27,7 +31,7 @@ class Add_Friends extends StatefulWidget {
 class _Add_FriendsState extends State<Add_Friends> {
 
 
-
+  NotificationWeekAndTime? pickedSchedule;
   String _name = '';
   GlobalKey<FormState> _key =GlobalKey<FormState>();
 
@@ -94,74 +98,36 @@ class _Add_FriendsState extends State<Add_Friends> {
                   SizedBox(
                     height: 5,
                   ),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () async {
-                          var selecteddate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
+                  GestureDetector(
+                      onTap: () async {
+                        pickedSchedule = await pickSchedule(context);
+                        print("88888888888888888,,,,,,,,,,,,,8888888888888888888888888888888888    ${pickedSchedule?.time}     ");
+                        // provider = Provider.of<TargetProvider>(context);
+                        // provider.updateTime();
+                        /*var selectedTime = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.now(),
 
-
-
-                              lastDate: DateTime(2050), firstDate:  DateTime(2023)
-                          );
-                          if (selecteddate != null) {
-                            Provider.of<TargetProvider>(context, listen: false).updateDate(selecteddate);
-                          }
-                        },
-                        child: Consumer<FriendsProvider>(
-                          builder: (context, FriendsProvider, _) => Container(
-                            padding: EdgeInsets.all(10),
-                            height: 50,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Center(
-                              child: Text(
-                                FriendsProvider.date,
-                                style: TextStyle(fontSize: 25, color: Colors.black),
-                              ),
-                            ),
-                          ),
+                );*/
+                        // if (pickedSchedule != null) {
+                        //   Provider.of<TargetProvider>(context, listen: false).updateTime(selectedTime);
+                        // }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        height: 50,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: AppColor.Green),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                      ),
+                        child: Center(
+                            child:
+                            Obx(() => Text('Time & Date: ${Universal.targettime}',style: TextStyle(
+                                fontSize: 13, color: Colors.black),),
 
-                      SizedBox(
-                        width: 15.w,
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          var selectedTime = await showTimePicker(
-                            context: context,
-                            initialTime: TimeOfDay.now(),
-                          );
-                          if (selectedTime != null) {
-                            Provider.of<FoeProvider>(context, listen: false).updateTime(selectedTime);
-                          }
-                        },
-                        child: Consumer<FoeProvider>(
-                          builder: (context, TargetProvider, _) => Container(
-                            padding: EdgeInsets.all(10),
-                            height: 50,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Center(
-                              child: Text(
-                                TargetProvider.time,
-                                style: TextStyle(fontSize: 25, color: Colors.black),
-                              ),
-                            ),
-                          ),
+                            )
                         ),
-                      ),
-
-
-
-                    ],
+                      )
                   ),
                   SizedBox(
                     height: 30,
@@ -172,7 +138,7 @@ class _Add_FriendsState extends State<Add_Friends> {
                         c2: AppColor.greenlight,
                         border:AppColor.green,
                         text: 'save',
-                        onPressed: () {
+                        onPressed: ()async {
                           if(_key.currentState!.validate()){
                             final data = FriendsModel(
                               friendsname: provider.FriendsName.text.toString(),
@@ -181,6 +147,19 @@ class _Add_FriendsState extends State<Add_Friends> {
                             );
 
                             final box = Boxes.getFriends();
+                            await NotificationService.showNotification(
+                              title:
+                              "${Emojis.person_role_health_worker} Remainder",
+                              body: "please Set your Friends ِ",
+                              scheduled: true,
+                              notificationLayout: NotificationLayout.ProgressBar,
+                              interval: 5,
+                              payload: {"navigate":"Friends"},
+                              actionButtons: [
+                                NotificationActionButton(key: 'check', label: 'check it out',actionType: ActionType.SilentBackgroundAction,color: Colors.orange,enabled: true,isDangerousOption: true,showInCompactView: true,requireInputText: true),
+                              ],
+                              notificationSchedule: pickedSchedule,
+                            );
 
 // Check if the entry already exists
                             final existingIndex = box.values.cast<FriendsModel>().toList().indexWhere(

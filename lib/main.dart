@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,7 +10,10 @@ import 'package:provider/provider.dart';
 import 'package:well_done/7Counter/7Counter.dart';
 import 'package:well_done/Home_Screen/ProjectScreen.dart';
 import 'package:get/get.dart';
+import 'package:well_done/Provider/UploadData%20to%20hive/uploadTargetData.dart';
+import 'package:well_done/Provider/loginProvider.dart';
 import 'package:well_done/Provider/project_screen.dart';
+import 'package:well_done/Provider/registeredProvider.dart';
 import 'package:well_done/Provider/sunMoonScreenProvider.dart';
 import 'package:well_done/Provider/targetScreenProvider.dart';
 import 'package:well_done/models/foe_model.dart';
@@ -23,6 +27,7 @@ import 'Provider/friendsprovider.dart';
 import 'notificationServices/notification_provider.dart';
 
 void main() async{
+
   WidgetsFlutterBinding.ensureInitialized();
   tz.initializeTimeZones();
   await NotificationService.initializeNotification();
@@ -61,9 +66,13 @@ class MyApp extends StatelessWidget {
             ChangeNotifierProvider(create: (_)=>FriendsProvider()),
             ChangeNotifierProvider(create: (_)=>ProjectScreenProvider()),
             ChangeNotifierProvider(create: (_)=>SunMoonProvider()),
+            ChangeNotifierProvider(create: (_)=>LoginProvider()),
+            ChangeNotifierProvider(create: (_)=>RegisterProvider()),
+            ChangeNotifierProvider(create: (_)=>UploadTarget()),
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,
+            navigatorKey: navigatorKey,
             title: 'First Method',
             // You can use the library anywhere in the app even in theme
             theme: ThemeData(

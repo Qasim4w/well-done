@@ -1,14 +1,18 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:well_done/DataLink/Streaming/Universal.dart';
 import 'package:well_done/Provider/targetScreenProvider.dart';
 import 'package:well_done/Widgets/Button.dart';
 import 'package:well_done/Widgets/Date_Time.dart';
 import 'package:well_done/Widgets/Project_TextField.dart';
 import 'package:well_done/Widgets/dropDown_Field.dart';
 import 'package:well_done/boxes/boxes.dart';
+import 'package:well_done/notificationServices/notification_provider.dart';
+import 'package:well_done/notificationServices/timeprovider.dart';
 import 'package:well_done/utils/AppColor.dart';
 
 import '../Targets/TargetListView.dart';
@@ -26,7 +30,7 @@ class Add_Foe extends StatefulWidget {
 class _Add_FoeState extends State<Add_Foe> {
 
 
-
+  NotificationWeekAndTime? pickedSchedule;
   String _name = '';
   GlobalKey<FormState> _key =GlobalKey<FormState>();
 
@@ -97,67 +101,37 @@ class _Add_FoeState extends State<Add_Foe> {
                   ),
                   Row(
                     children: [
+
                       GestureDetector(
-                        onTap: () async {
-                          var selecteddate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
+                          onTap: () async {
+                            pickedSchedule = await pickSchedule(context);
+                            print("88888888888888888,,,,,,,,,,,,,8888888888888888888888888888888888    ${pickedSchedule?.time}     ");
+                            // provider = Provider.of<TargetProvider>(context);
+                            // provider.updateTime();
+                            /*var selectedTime = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.now(),
 
-
-
-                              lastDate: DateTime(2050), firstDate:  DateTime(2023)
-                          );
-                          if (selecteddate != null) {
-                            Provider.of<TargetProvider>(context, listen: false).updateDate(selecteddate);
-                          }
-                        },
-                        child: Consumer<TargetProvider>(
-                          builder: (context, TargetProvider, _) => Container(
+                );*/
+                            // if (pickedSchedule != null) {
+                            //   Provider.of<TargetProvider>(context, listen: false).updateTime(selectedTime);
+                            // }
+                          },
+                          child: Container(
                             padding: EdgeInsets.all(10),
                             height: 50,
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
+                              border: Border.all(color: AppColor.orange),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Center(
-                              child: Text(
-                                TargetProvider.date,
-                                style: TextStyle(fontSize: 25, color: Colors.black),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                                child:
+                                Obx(() => Text('Time & Date: ${Universal.targettime}',style: TextStyle(
+                                    fontSize: 13, color: Colors.black),),
 
-                      SizedBox(
-                        width: 15.w,
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          var selectedTime = await showTimePicker(
-                            context: context,
-                            initialTime: TimeOfDay.now(),
-                          );
-                          if (selectedTime != null) {
-                            Provider.of<FoeProvider>(context, listen: false).updateTime(selectedTime);
-                          }
-                        },
-                        child: Consumer<FoeProvider>(
-                          builder: (context, TargetProvider, _) => Container(
-                            padding: EdgeInsets.all(10),
-                            height: 50,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(10),
+                                )
                             ),
-                            child: Center(
-                              child: Text(
-                                TargetProvider.time,
-                                style: TextStyle(fontSize: 25, color: Colors.black),
-                              ),
-                            ),
-                          ),
-                        ),
+                          )
                       ),
 
 
@@ -173,8 +147,27 @@ class _Add_FoeState extends State<Add_Foe> {
                         c2: Color(0xFFF7B733),
                         border: Color(0xFFFC4A1A),
                         text: 'save',
-                        onPressed: () {
+                        onPressed: () async{
                           if(_key.currentState!.validate()){
+                           // NotificationService.cancelScheduledNotifications();
+                            print(
+                                "----------------------${pickedSchedule}------------,,,,,,,,-------------------------");
+                            print(
+                                "----------------------${pickedSchedule?.timeOfDay.month}------------------${pickedSchedule?.timeOfDay.day}---------------------"); print(
+                                "----------------------${pickedSchedule?.timeOfDay.year}-------------------------------------");
+
+                            await NotificationService.showNotification(
+                              title:
+                              "${Emojis.person_role_health_worker} Remainder",
+                              body: "please Set your Foe ِ",
+                              scheduled: true,
+                              interval: 5,
+                              payload: {"navigate":"Foe"},
+                              actionButtons: [
+                                NotificationActionButton(key: 'check', label: 'check it out',actionType: ActionType.SilentAction,color: Colors.orange)
+                              ],
+                              notificationSchedule: pickedSchedule,
+                            );
                             final data =FoeModel(foename: provider.FoeName.text.toString(),targetname:widget.Targetname,opactiyFoe: .4);
                             final box=Boxes.getFoe();
                             final existingIndex = box.values.cast<FoeModel>().toList().indexWhere(

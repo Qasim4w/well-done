@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
+import 'package:well_done/Auth/login_screen.dart';
 import 'package:well_done/Home_Screen/SunMoon.dart';
 import 'package:well_done/Home_Screen/components/button_container.dart';
 import 'package:well_done/Provider/project_screen.dart';
@@ -197,6 +198,10 @@ class _ProjectScreenState extends State<ProjectScreen> with TickerProviderStateM
                 );
               })
               ,
+              Positioned(top: 10.h,left: 20.w,
+                  child: InkWell(
+                      onTap: (){Get.to(LoginScreen());},
+                      child: Icon(Icons.login,size: 25.h,color: AppColor.orange,))),
               Positioned(top: 250.h,left: 50.w,right: 50.h,
                 child: Visibility(
                   visible: provider.detailBoxCentre,

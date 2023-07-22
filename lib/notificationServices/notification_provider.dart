@@ -2,8 +2,10 @@
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:well_done/Foes/Add_Foe.dart';
 import 'package:well_done/notificationServices/timeprovider.dart';
 
+import '../Friends/Add_Friends.dart';
 import '../Targets/Add_target.dart';
 import '../main.dart';
 
@@ -75,10 +77,26 @@ class NotificationService {
       ReceivedAction receivedAction) async {
     debugPrint('onActionReceivedMethod');
     final payload = receivedAction.payload ?? {};
-    if (payload["navigate"] == "true") {
+    if (payload["navigate"] == "Target") {
       MyApp.navigatorKey.currentState?.push(
         MaterialPageRoute(
           builder: (_) =>  Add_target(),
+
+        ),
+      );
+    }
+    else  if (payload["navigate"] == "Friends") {
+      MyApp.navigatorKey.currentState?.push(
+        MaterialPageRoute(
+          builder: (_) =>  Add_Friends(Targetname: "Target Name Abc"),
+
+        ),
+      );
+    }
+    else  if (payload["navigate"] == "Foe") {
+      MyApp.navigatorKey.currentState?.push(
+        MaterialPageRoute(
+          builder: (_) =>  Add_Foe(Targetname: 'Targetname'),
 
         ),
       );

@@ -6,6 +6,7 @@ class App_TextField extends StatelessWidget {
   final String? labelText;
   final double? fieldheight;
   final int? maxline;
+  TextInputType? keyboardType;
   final Function(String)? onChanged;
   String? Function(String?)? validator;
   final Color? focusColor;
@@ -15,6 +16,7 @@ class App_TextField extends StatelessWidget {
   App_TextField({
     required this.controller,
     this.validator,
+    this.keyboardType,
     this.focusColor,
     required this.hintText,
     this.labelText,
@@ -30,6 +32,7 @@ class App_TextField extends StatelessWidget {
       height: fieldheight,
       child: TextFormField(
         validator: validator,
+       keyboardType: keyboardType,
        maxLines: maxline,
         style: TextStyle(color: Colors.black),
         controller: controller,

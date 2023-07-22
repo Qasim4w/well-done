@@ -14,6 +14,7 @@ import 'package:well_done/globalVariable.dart';
 import 'package:well_done/models/target_model.dart';
 import 'package:well_done/utils/AppColor.dart';
 
+import '../DataLink/Streaming/Universal.dart';
 import '../notificationServices/notification_provider.dart';
 import '../notificationServices/timeprovider.dart';
 import 'TargetListView.dart';
@@ -148,39 +149,39 @@ class _Add_targetState extends State<Add_target> {
                   ),
                   Row(
                     children: [
-                      GestureDetector(
-                        onTap: () async {
-                          var selecteddate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              lastDate: DateTime(2050),
-                              firstDate: DateTime(2023));
-                          if (selecteddate != null) {
-                            Provider.of<TargetProvider>(context, listen: false)
-                                .updateDate(selecteddate);
-                          }
-                        },
-                        child: Consumer<TargetProvider>(
-                          builder: (context, TargetProvider, _) => Container(
-                            padding: EdgeInsets.all(10),
-                            height: 50,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: AppColor.purple),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Center(
-                              child: Text(
-                                TargetProvider.date,
-                                style: TextStyle(
-                                    fontSize: 25, color: Colors.black),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 15.w,
-                      ),
+                      // GestureDetector(
+                      //   onTap: () async {
+                      //     var selecteddate = await showDatePicker(
+                      //         context: context,
+                      //         initialDate: DateTime.now(),
+                      //         lastDate: DateTime(2050),
+                      //         firstDate: DateTime(2023));
+                      //     if (selecteddate != null) {
+                      //       Provider.of<TargetProvider>(context, listen: false)
+                      //           .updateDate(selecteddate);
+                      //     }
+                      //   },
+                      //   child: Consumer<TargetProvider>(
+                      //     builder: (context, TargetProvider, _) => Container(
+                      //       padding: EdgeInsets.all(10),
+                      //       height: 50,
+                      //       decoration: BoxDecoration(
+                      //         border: Border.all(color: AppColor.purple),
+                      //         borderRadius: BorderRadius.circular(10),
+                      //       ),
+                      //       child: Center(
+                      //         child: Text(
+                      //           TargetProvider.date,
+                      //           style: TextStyle(
+                      //               fontSize: 25, color: Colors.black),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   width: 15.w,
+                      // ),
                       GestureDetector(
                         onTap: () async {
                           pickedSchedule = await pickSchedule(context);
@@ -196,24 +197,21 @@ class _Add_targetState extends State<Add_target> {
                           //   Provider.of<TargetProvider>(context, listen: false).updateTime(selectedTime);
                           // }
                         },
-                        child: Consumer<TargetProvider>(
-                          builder: (context, TargetProvider, _) => Container(
-                            padding: EdgeInsets.all(10),
-                            height: 50,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: AppColor.purple),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Center(
-                              child: Text(
-                                TargetProvider.time.toString(),
-                                //  pickedSchedule.timeOfDay,
-                                style: TextStyle(
-                                    fontSize: 25, color: Colors.black),
-                              ),
-                            ),
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          height: 50,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppColor.purple),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                        ),
+                          child: Center(
+                              child:
+                              Obx(() => Text('Time & Date: ${Universal.targettime}',style: TextStyle(
+                                  fontSize: 13, color: Colors.black),),
+
+                              )
+                          ),
+                        )
                       ),
                     ],
                   ),
@@ -228,20 +226,20 @@ class _Add_targetState extends State<Add_target> {
                         text: 'save',
                         onPressed: () async {
                           if (_key.currentState!.validate()) {
-                            //NotificationService.cancelScheduledNotifications();
+                            // NotificationService.cancelScheduledNotifications();
                             print(
-                                "----------------------${pickedSchedule?.timeOfDay}-------------------------------------");
+                                "----------------------${pickedSchedule}------------,,,,,,,,-------------------------");
                             print(
                                 "----------------------${pickedSchedule?.timeOfDay.month}------------------${pickedSchedule?.timeOfDay.day}---------------------"); print(
                                 "----------------------${pickedSchedule?.timeOfDay.year}-------------------------------------");
 
                             await NotificationService.showNotification(
                               title:
-                                  "${Emojis.person_role_health_worker} Please Set Target",
-                              body: "Set your Target ِ",
-                              scheduled: false,
-                              interval: 0,
-                              payload: {"navigate":"true"},
+                                  "${Emojis.person_role_health_worker} Remainder",
+                              body: "please Set your Target ِ",
+                              scheduled: true,
+                              interval: 5,
+                              payload: {"navigate":"Target"},
                               actionButtons: [
                                 NotificationActionButton(key: 'check', label: 'check it out',actionType: ActionType.SilentAction,color: Colors.orange)
                               ],
@@ -254,7 +252,7 @@ class _Add_targetState extends State<Add_target> {
                                 Date: provider.date,
                                 Description:
                                     provider.targetDescription.text.toString(),
-                                Time: GlobalVariable.time.toString());
+                                Time: Universal.targettime.value);
                             final box = Boxes.getData();
                             print(GlobalVariable.time.toString());
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:well_done/DataLink/Streaming/Universal.dart';
 import 'package:well_done/globalVariable.dart';
 
 int createUniqueId() {
@@ -40,15 +42,23 @@ Future<NotificationWeekAndTime?> pickSchedule(
     );
 
     if (pickedTime != null) {
-
+Universal.targettime.value="${pickedTime.hour}:${ pickedTime.minute} || ${picked.day}-${ picked.month}-${ picked.year}" ;
+print(".....................................................${Universal.targettime}");
       selectedDateTime = DateTime(
         picked.year,
         picked.month,
         picked.day,
         pickedTime.hour,
         pickedTime.minute,
+
       );
     }
+
+    print("...${picked.year}..........${picked.month}...............${picked.day}............${pickedTime?.hour}.............${pickedTime?.minute}");
+
+
+
+
     return NotificationWeekAndTime(timeOfDay: selectedDateTime!);
   }
 
