@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
-
+///universal file
 class Universal extends GetxController {
   ///====================================================================Networking==================(open)
   static String baseURL = "https://capitalcity.etradeverse.com/api/";
