@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:well_done/DataLink/Streaming/Universal.dart';
+import 'package:well_done/Foes/reScheduleFoe.dart';
 import 'package:well_done/Provider/targetScreenProvider.dart';
 import 'package:well_done/Widgets/Button.dart';
 import 'package:well_done/Widgets/Date_Time.dart';
@@ -164,8 +165,9 @@ class _Add_FoeState extends State<Add_Foe> {
                               interval: 5,
                               payload: {"navigate":"Foe"},
                               actionButtons: [
-                                NotificationActionButton(key: 'check', label: 'check it out',actionType: ActionType.SilentAction,color: Colors.orange)
-                              ],
+                                NotificationActionButton(key: 'Set Foe', label: 'Set Your Foe',actionType: ActionType.SilentAction,color: Colors.purple),
+                                NotificationActionButton(key: 'Ask Me Later Foe', label: 'Ask Me Later ',actionType: ActionType.SilentAction,color: Colors.red,isDangerousOption: true
+                                ) ],
                               notificationSchedule: pickedSchedule,
                             );
                             final data =FoeModel(foename: provider.FoeName.text.toString(),targetname:widget.Targetname,opactiyFoe: .4);
@@ -188,10 +190,14 @@ class _Add_FoeState extends State<Add_Foe> {
                             // box.clear();
                             Get.back();
 
+
                             provider.controllerClear();
                             Get.snackbar('', 'Foe add Successfully  ');
 
                             Get.to(TargetListScreen());
+                            if(box.length<15){
+                              _showDialog(context);
+                            }
                           }
                           else {
                             Get.snackbar('Warning', 'Please fill the form ');
@@ -206,6 +212,36 @@ class _Add_FoeState extends State<Add_Foe> {
           ),
         ),
       ),
+    );
+  }
+  void _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return
+          AlertDialog(
+            title: Text('Remainder !',style: TextStyle(color: AppColor.purple),),
+            content: Text('Do You Want to Add More Foes on This Target',style: TextStyle(color: AppColor.purple),),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Add Foes ',style: TextStyle(color: AppColor.orange),),
+                onPressed: () {
+                  Get.to(Add_Foe(Targetname: widget.Targetname))?.then((value) =>     Navigator.of(context).pop());
+
+                },
+              ),
+              TextButton(
+                child: Text('Ask Me Later ',style: TextStyle(color: AppColor.green),),
+                onPressed: () {
+                  Get.to(ReScheduleFoe())?.then((value) =>     Navigator.of(context).pop());
+
+
+                },
+              ),
+            ],
+          );
+      },
+
     );
   }
 }

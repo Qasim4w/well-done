@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:animation_list/animation_list.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -40,6 +41,7 @@ class _ProjectScreenState extends State<ProjectScreen> with TickerProviderStateM
   late AnimationController _controller;
   void initState() {
     super.initState();
+    permission();
     _controller = AnimationController(
       duration: const Duration(seconds: 1),
       vsync: this,
@@ -49,9 +51,16 @@ class _ProjectScreenState extends State<ProjectScreen> with TickerProviderStateM
     startTimer();
     // Other initialization code for the AnimationController
   }
+  void permission()async{
+    bool isallowed = await AwesomeNotifications().isNotificationAllowed();
+    if (!isallowed) {
+      //no permission of local notification
+      AwesomeNotifications().requestPermissionToSendNotifications();
+    }
+  }
   void startTimer() {
     // Schedule the function to run every 5 minutes (300 seconds)
-    timer = Timer.periodic(Duration(minutes: 10), (_) {
+    timer = Timer.periodic(Duration(minutes: 20), (_) {
       updateOpacityForAll();
       print("Timeer call");
     });
@@ -88,7 +97,7 @@ class _ProjectScreenState extends State<ProjectScreen> with TickerProviderStateM
   }
   void updateOpacityForAll() {
     final box = Hive.box<FriendsModel>('friends');
-
+    final box1 = Hive.box<FoeModel>('foe');
     // Iterate over each item in the box
     for (int i = 0; i < box.length; i++) {
       final friend = box.get(i) as FriendsModel;
@@ -99,7 +108,19 @@ class _ProjectScreenState extends State<ProjectScreen> with TickerProviderStateM
 
       // Save the updated target model to the box
       box.put(i, friend);
-    }}
+    }
+    for (int i = 0; i < box1.length; i++) {
+      final friend1 = box.get(i) as FoeModel;
+
+      // Update the opacity
+      friend1.opactiyFoe = 0.5;
+      print('********************************${friend1.opactiyFoe}Change from .9 ************************');
+
+      // Save the updated target model to the box
+      box1.put(i, friend1);
+    }
+  }
+
 
 
   @override
@@ -414,10 +435,10 @@ class _ProjectScreenState extends State<ProjectScreen> with TickerProviderStateM
                     builder: (context,box,_){
                       var data = box.values.toList().cast<TargetModel>();
                       return AnimationList(
-                          duration: 1500,
+                          duration: 3500,
 
                           physics: BouncingScrollPhysics(),
-                          reBounceDepth: 30,
+                          reBounceDepth: 60,
                           controller: ScrollController(keepScrollOffset: true),
                           children: data.map((item) {
                             return Column(

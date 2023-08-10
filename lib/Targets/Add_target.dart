@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:well_done/Provider/targetScreenProvider.dart';
+import 'package:well_done/Targets/notificationSchedule.dart';
 import 'package:well_done/Widgets/Button.dart';
 import 'package:well_done/Widgets/Date_Time.dart';
 import 'package:well_done/Widgets/Project_TextField.dart';
@@ -147,73 +148,26 @@ class _Add_targetState extends State<Add_target> {
                   SizedBox(
                     height: 5,
                   ),
-                  Row(
-                    children: [
-                      // GestureDetector(
-                      //   onTap: () async {
-                      //     var selecteddate = await showDatePicker(
-                      //         context: context,
-                      //         initialDate: DateTime.now(),
-                      //         lastDate: DateTime(2050),
-                      //         firstDate: DateTime(2023));
-                      //     if (selecteddate != null) {
-                      //       Provider.of<TargetProvider>(context, listen: false)
-                      //           .updateDate(selecteddate);
-                      //     }
-                      //   },
-                      //   child: Consumer<TargetProvider>(
-                      //     builder: (context, TargetProvider, _) => Container(
-                      //       padding: EdgeInsets.all(10),
-                      //       height: 50,
-                      //       decoration: BoxDecoration(
-                      //         border: Border.all(color: AppColor.purple),
-                      //         borderRadius: BorderRadius.circular(10),
-                      //       ),
-                      //       child: Center(
-                      //         child: Text(
-                      //           TargetProvider.date,
-                      //           style: TextStyle(
-                      //               fontSize: 25, color: Colors.black),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                      // SizedBox(
-                      //   width: 15.w,
-                      // ),
-                      GestureDetector(
-                        onTap: () async {
-                          pickedSchedule = await pickSchedule(context);
-                          print("88888888888888888,,,,,,,,,,,,,8888888888888888888888888888888888    ${pickedSchedule?.time}     ");
-                          // provider = Provider.of<TargetProvider>(context);
-                          // provider.updateTime();
-                          /*var selectedTime = await showTimePicker(
-                  context: context,
-                  initialTime: TimeOfDay.now(),
+                  GestureDetector(
+                    onTap: () async {
+                      pickedSchedule = await pickSchedule(context);
 
-                );*/
-                          // if (pickedSchedule != null) {
-                          //   Provider.of<TargetProvider>(context, listen: false).updateTime(selectedTime);
-                          // }
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          height: 50,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: AppColor.purple),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Center(
-                              child:
-                              Obx(() => Text('Time & Date: ${Universal.targettime}',style: TextStyle(
-                                  fontSize: 13, color: Colors.black),),
-
-                              )
-                          ),
-                        )
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      height: 50,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: AppColor.purple),
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                    ],
+                      child: Center(
+                          child:
+                          Obx(() => Text('Time & Date: ${Universal.targettime}',style: TextStyle(
+                              fontSize: 13, color: Colors.black),),
+
+                          )
+                      ),
+                    )
                   ),
                   SizedBox(
                     height: 30,
@@ -226,7 +180,7 @@ class _Add_targetState extends State<Add_target> {
                         text: 'save',
                         onPressed: () async {
                           if (_key.currentState!.validate()) {
-                            // NotificationService.cancelScheduledNotifications();
+                            NotificationService.cancelScheduledNotifications();
                             print(
                                 "----------------------${pickedSchedule}------------,,,,,,,,-------------------------");
                             print(
@@ -235,18 +189,21 @@ class _Add_targetState extends State<Add_target> {
 
                             await NotificationService.showNotification(
                               title:
-                                  "${Emojis.person_role_health_worker} Remainder",
+                                  "${Emojis.activites_balloon} Remainder",
                               body: "please Set your Target ِ",
                               scheduled: true,
                               interval: 5,
-                              payload: {"navigate":"Target"},
+
+                              // payload: {"navigate":"Target"},
                               actionButtons: [
-                                NotificationActionButton(key: 'check', label: 'check it out',actionType: ActionType.SilentAction,color: Colors.orange)
+                                NotificationActionButton(key: 'Set Notification', label: 'Set Targets',actionType: ActionType.SilentAction,color: Colors.purple),
+                                NotificationActionButton(key: 'Ask Me Later', label: 'Ask Me Later ',actionType: ActionType.SilentAction,color: Colors.red,isDangerousOption: true
+                                )
                               ],
                               notificationSchedule: pickedSchedule,
                             );
 
-                            final data = TargetModel(
+                            final data1 = TargetModel(
                                 TargetName: provider.targetName.text.toString(),
                                 Frequency: provider.hintText,
                                 Date: provider.date,
@@ -255,16 +212,15 @@ class _Add_targetState extends State<Add_target> {
                                 Time: Universal.targettime.value);
                             final box = Boxes.getData();
                             print(GlobalVariable.time.toString());
-
                             final existingIndex = box.values
                                 .cast<TargetModel>()
                                 .toList()
                                 .indexWhere((target) =>
-                                    target.TargetName == data.TargetName);
+                                    target.TargetName == data1.TargetName);
 
                             if (existingIndex == -1) {
-                              box.add(data);
-                              data.save();
+                              box.add(data1);
+                             data1.save();
                               Get.back();
                               Get.snackbar('', 'Congrulation');
                             } else {
@@ -274,6 +230,9 @@ class _Add_targetState extends State<Add_target> {
                               Get.snackbar('', 'Data Already Exits');
                             }
                             Get.back();
+                          if(box.length<15){
+                            _showDialog(context);
+                          }
 
                             provider.controllerClear();
                           } else {
@@ -289,6 +248,43 @@ class _Add_targetState extends State<Add_target> {
       ),
     );
   }
+  void _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return
+          AlertDialog(
+            title: Text('Remainder !',style: TextStyle(color: AppColor.purple),),
+            content: Text('Do You Want to Add More Target ',style: TextStyle(color: AppColor.purple),),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Add Targets ',style: TextStyle(color: AppColor.orange),),
+                onPressed: () {
+                  Get.to(Add_target())?.then((value) =>   Navigator.of(context).pop());
+                
+
+
+                },
+              ),
+              TextButton(
+                child: Text('Ask Me Later ',style: TextStyle(color: AppColor.green),),
+                onPressed: () {
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ScheduleNotification()),
+                ).then((value) =>     Navigator.of(context).pop());
+            
+
+                },
+              ),
+            ],
+          );
+      },
+
+    );
+  }
+
 }
 
 class Person {
