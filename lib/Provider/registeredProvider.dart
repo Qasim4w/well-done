@@ -60,8 +60,7 @@ class RegisterProvider with ChangeNotifier {
 //200
       if (response.statusCode == 200) {
         updateValue(load: false);
-        // var jsonResponce = json.decode(response.body);
-        // toast().toastmsg("Register Successfully", white);
+  
         print(response.statusCode);
         Get.snackbar('Hello', 'Welcome to Guess Chat Kindly Login to Start');
         Get.to(LoginScreen(controller: emailController,));

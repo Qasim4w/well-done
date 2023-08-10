@@ -3,6 +3,9 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:well_done/Foes/Add_Foe.dart';
+import 'package:well_done/Foes/reScheduleFoe.dart';
+import 'package:well_done/Targets/TargetListView.dart';
+import 'package:well_done/Targets/notificationSchedule.dart';
 import 'package:well_done/notificationServices/timeprovider.dart';
 
 import '../Friends/Add_Friends.dart';
@@ -15,6 +18,7 @@ class NotificationService {
     await AwesomeNotifications().initialize(
       null,
       [
+
         NotificationChannel(
           //  channelGroupKey: 'high_importance_channel',
           channelKey: 'high_importance_channel',
@@ -26,7 +30,8 @@ class NotificationService {
           channelShowBadge: true,
           onlyAlertOnce: true,
           playSound: true,
-          // criticalAlerts: true,
+          enableVibration: true,
+          criticalAlerts: true,
         )
       ],
       channelGroups: [
@@ -76,6 +81,73 @@ class NotificationService {
   static Future<void> onActionReceivedMethod(
       ReceivedAction receivedAction) async {
     debugPrint('onActionReceivedMethod');
+    if (receivedAction != null) {
+      String buttonKey = receivedAction.buttonKeyPressed;
+
+      if (buttonKey == 'Ask Me Later') {
+        // Handle navigation to Screen 1
+        // You can use your preferred navigation method (e.g., Navigator.push())
+        MyApp.navigatorKey.currentState?.push(
+            MaterialPageRoute(
+              builder: (_) =>  ScheduleNotification(),
+        ));
+      } else if (buttonKey == 'Set Notification') {
+        // Handle navigation to Screen 2
+        MyApp.navigatorKey.currentState?.push(
+          MaterialPageRoute(
+            builder: (_) =>  Add_target(),
+
+          ),
+
+
+        );}
+      else if (buttonKey == 'Set Friends') {
+        // Handle navigation to Screen 2
+        MyApp.navigatorKey.currentState?.push(
+          MaterialPageRoute(
+            builder: (_) =>  TargetListScreen(),
+
+          ),
+
+
+
+        );}
+      else if (buttonKey == 'Ask Me Later Friends') {
+        // Handle navigation to Screen 2
+        MyApp.navigatorKey.currentState?.push(
+          MaterialPageRoute(
+            builder: (_) =>  TargetListScreen(),
+
+          ),
+
+
+
+        );}
+      else if (buttonKey == 'Set Foe') {
+        // Handle navigation to Screen 2
+        MyApp.navigatorKey.currentState?.push(
+          MaterialPageRoute(
+            builder: (_) =>  TargetListScreen(),
+
+          ),
+
+
+
+        );}
+      else if (buttonKey =='Ask Me Later Foe') {
+        // Handle navigation to Screen 2
+        MyApp.navigatorKey.currentState?.push(
+          MaterialPageRoute(
+            builder: (_) =>  ReScheduleFoe(),
+
+          ),
+
+
+
+        );}
+
+
+      }
     final payload = receivedAction.payload ?? {};
     if (payload["navigate"] == "Target") {
       MyApp.navigatorKey.currentState?.push(
@@ -88,7 +160,7 @@ class NotificationService {
     else  if (payload["navigate"] == "Friends") {
       MyApp.navigatorKey.currentState?.push(
         MaterialPageRoute(
-          builder: (_) =>  Add_Friends(Targetname: "Target Name Abc"),
+          builder: (_) => Add_target(),
 
         ),
       );
@@ -96,7 +168,7 @@ class NotificationService {
     else  if (payload["navigate"] == "Foe") {
       MyApp.navigatorKey.currentState?.push(
         MaterialPageRoute(
-          builder: (_) =>  Add_Foe(Targetname: 'Targetname'),
+          builder: (_) =>  Add_target(),
 
         ),
       );
@@ -130,8 +202,8 @@ class NotificationService {
         summary: summary,
         category: category,
         payload: payload,
-        bigPicture: bigPicture,
-      ),
+
+autoDismissible: false,      ),
       actionButtons: actionButtons,
 
       schedule:scheduled? NotificationCalendar(day:notificationSchedule?.timeOfDay.day ,month: notificationSchedule?.timeOfDay.month,

@@ -1,0 +1,53 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'target_model.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
+
+class TargetModelAdapter extends TypeAdapter<TargetModel> {
+  @override
+  final int typeId = 0;
+
+  @override
+  TargetModel read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return TargetModel(
+      TargetName: fields[0] as String,
+      Frequency: fields[2] as String,
+      Date: fields[3] as String,
+      Description: fields[1] as String,
+      Time: fields[4] as String,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, TargetModel obj) {
+    writer
+      ..writeByte(5)
+      ..writeByte(0)
+      ..write(obj.TargetName)
+      ..writeByte(1)
+      ..write(obj.Description)
+      ..writeByte(2)
+      ..write(obj.Frequency)
+      ..writeByte(3)
+      ..write(obj.Date)
+      ..writeByte(4)
+      ..write(obj.Time);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TargetModelAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}

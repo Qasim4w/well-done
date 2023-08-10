@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:well_done/DataLink/Streaming/Universal.dart';
+import 'package:well_done/Friends/reScheduleFriends.dart';
 import 'package:well_done/Provider/friendsprovider.dart';
 import 'package:well_done/Provider/targetScreenProvider.dart';
 import 'package:well_done/Widgets/Button.dart';
@@ -152,11 +153,13 @@ class _Add_FriendsState extends State<Add_Friends> {
                               "${Emojis.person_role_health_worker} Remainder",
                               body: "please Set your Friends ِ",
                               scheduled: true,
-                              notificationLayout: NotificationLayout.ProgressBar,
+                              notificationLayout: NotificationLayout.Default,
                               interval: 5,
                               payload: {"navigate":"Friends"},
                               actionButtons: [
-                                NotificationActionButton(key: 'check', label: 'check it out',actionType: ActionType.SilentBackgroundAction,color: Colors.orange,enabled: true,isDangerousOption: true,showInCompactView: true,requireInputText: true),
+                                NotificationActionButton(key: 'Set Friends', label: 'Set Your Friends',actionType: ActionType.SilentAction,color: Colors.purple),
+                                NotificationActionButton(key: 'Ask Me Later Friends', label: 'Ask Me Later ',actionType: ActionType.SilentAction,color: Colors.red,isDangerousOption: true
+                                )
                               ],
                               notificationSchedule: pickedSchedule,
                             );
@@ -180,11 +183,15 @@ class _Add_FriendsState extends State<Add_Friends> {
 
                             // box.clear();
                             Get.back();
+
                             print(data);
                             provider.controllerClear();
 
 
                             Get.to(TargetListScreen());
+                            if(box.length<15){
+                              _showDialog(context);
+                            }
                           }
                           else {
                             Get.snackbar('Warning', 'Please fill the form ');
@@ -199,6 +206,36 @@ class _Add_FriendsState extends State<Add_Friends> {
           ),
         ),
       ),
+    );
+  }
+  void _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return
+          AlertDialog(
+            title: Text('Remainder !',style: TextStyle(color: AppColor.purple),),
+            content: Text('Do You Want to Add More Friends on This Target',style: TextStyle(color: AppColor.purple),),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Add Friends ',style: TextStyle(color: AppColor.orange),),
+                onPressed: () {
+                  Get.to(Add_Friends(Targetname: widget.Targetname))?.then((value) =>     Navigator.of(context).pop());
+
+                },
+              ),
+              TextButton(
+                child: Text('Ask Me Later ',style: TextStyle(color: AppColor.green),),
+                onPressed: () {
+                  Get.to(ReScheduleFriends())?.then((value) => Navigator.of(context).pop());
+
+
+                },
+              ),
+            ],
+          );
+      },
+
     );
   }
 }
